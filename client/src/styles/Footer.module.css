@@ -1,0 +1,143 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.footer {
+    background-color: #190a00; 
+    color: #fff;
+    font-family: "Montserrat", sans-serif;
+    padding: 3rem 0;
+    background: linear-gradient(90deg, #170A00, #170600, #0F0700, #170A00);
+}
+
+.topSection {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+}
+
+.logo {
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, #f6b133 0%, #f97316 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    align-self: flex-start;
+    margin-right: 5rem;
+    text-decoration: none; 
+}
+
+.linkColumns {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1; 
+}
+
+.column {
+    min-width: 120px;
+}
+
+.columnTitle {
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+    color:#B0B0B0;
+    text-decoration: none; 
+    display: block; 
+    transition: color 0.2s;
+}
+
+.columnTitle:hover {
+    color: #f97316;
+}
+
+.column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.linkItem {
+    margin-bottom: 0.5rem;
+}
+
+.link {
+    font-size: 0.95rem;
+    color: #515151;
+    text-decoration: none;
+    transition: color 0.2s;
+    font-weight: 400;
+}
+
+.link:hover {
+    color: #f97316;
+}
+
+.bottomSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.contact {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #f97316; 
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact:hover {
+    color: #fff;
+}
+
+.socialIcons {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.socialLink {
+    font-size: 1.5rem;
+    color: #fff;
+    transition: color 0.2s;
+}
+
+.socialLink:hover {
+    color: #f97316;
+}
+
+@media (max-width: 768px) {
+    .topSection {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .logo {
+        margin-bottom: 2rem;
+    }
+
+    .linkColumns {
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+    
+    .column {
+        min-width: 100%;
+        text-align: left; 
+        padding-left: 20%; 
+        box-sizing: border-box;
+    }
+
+    .bottomSection {
+        justify-content: center;
+        text-align: center;
+        flex-direction: column;
+        gap: 1rem;
+    }
+}

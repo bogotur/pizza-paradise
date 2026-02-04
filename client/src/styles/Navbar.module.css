@@ -1,0 +1,150 @@
+.container {
+  max-width: 1200px; 
+  margin: 0 auto; 
+  width: 100%;
+  height: 100%; 
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  z-index: 1000;
+  height: 80px;
+  background: radial-gradient(
+    circle at center,
+    #1E0C00 0%,
+    #1F0700 40%,
+    #170A00 75%,
+    #1E0D00 100%
+  );
+  color: #fff;
+  font-family: 'Pacifico', cursive;
+  width: 100%;
+}
+
+.navContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+  padding: 0 1.5rem; 
+}
+
+.brandContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.logo {
+  width: 55px;
+  height: 55px;
+}
+
+.brandLink {
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+}
+
+.brand {
+  font-family: 'montserrat', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #f6b133 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.menu {
+  font-family: 'montserrat', sans-serif;
+  list-style: none;
+  display: flex;
+  gap: 4.5rem;
+  font-weight: 200;
+  font-size: 1rem;
+}
+
+.menu li {
+  position: relative;
+}
+
+.menu li::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -20px;
+  transform: translateX(-50%) scale(0.4);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #FF6432, #FFA228);
+  opacity: 0;
+  transition: 0.25s ease;
+}
+
+.menu li:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.menu li a {
+  text-decoration: none;
+  font-weight: 250;
+  color: #c6c6c6;
+  transition: 0.3s;
+}
+
+.menu li a:hover {
+  background: linear-gradient(90deg, #FF6432, #FFA228);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.signin {
+  font-family: 'montserrat', sans-serif;
+  padding: 0.4rem 2.5rem;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #FF5D29, #FE9C1C);
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.25s;
+  margin-left: 0.8rem;
+  font-size: 1.05rem;
+}
+
+.signin:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
+}
+
+.iconCircle {
+  position: relative;
+  align-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #FF6432, #FFA228);
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.iconCircle:hover {
+  transform: scale(1.12);
+}
+
+.iconCircle img {
+  width: 30px;
+  height: 30px;
+}

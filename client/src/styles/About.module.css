@@ -1,0 +1,114 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.aboutPage {
+    width: 100%;
+    font-family: "Montserrat", sans-serif;
+    color: #fff; 
+    background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
+    overflow: hidden;
+    padding: 5rem 0;
+}
+
+.aboutContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 3rem;
+}
+
+.textColumn {
+    flex: 1; 
+    max-width: 50%;
+    padding-top: 3rem; 
+    z-index: 10; 
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 2rem;
+    position: relative;
+    color: #fff;
+}
+
+.textBlock {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: #ccc;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.smallPizzasContainer {
+    display: flex;
+    position: relative;
+    height: 150px; 
+    margin-bottom: 3rem;
+}
+
+.smallPizzaItem {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-size: cover; 
+    background-position: center;
+    position: absolute;
+}
+
+.smallPizzasContainer div:nth-child(1) { left: 0; z-index: 5; }
+.smallPizzasContainer div:nth-child(2) { left: 80px; z-index: 4; transform: scale(0.9); }
+.smallPizzasContainer div:nth-child(3) { left: 160px; z-index: 3; transform: scale(0.85); }
+.smallPizzasContainer div:nth-child(4) { left: 230px; z-index: 2; opacity: 0.8; }
+.smallPizzasContainer div:nth-child(5) { left: 290px; z-index: 1; opacity: 0.6; }
+
+.imageColumn {
+    flex: 1; 
+    max-width: 50%;
+    height: 700px; 
+    position: relative;
+}
+
+.mainPizzaImage {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+}
+
+@media (max-width: 992px) {
+    .aboutContent {
+        flex-direction: column;
+    }
+
+    .textColumn,
+    .imageColumn {
+        max-width: 100%;
+    }
+
+    .smallPizzasContainer {
+        justify-content: center;
+        position: static; 
+        height: auto;
+        padding-bottom: 10px;
+    }
+
+    .smallPizzasContainer div {
+        position: static;
+        transform: scale(1);
+        opacity: 1;
+        margin-right: -20px;
+        flex-shrink: 0;
+    }
+
+    .imageColumn {
+        height: 400px; 
+    }
+}

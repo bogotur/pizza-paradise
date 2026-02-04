@@ -1,0 +1,111 @@
+.avatarWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+.dropdown {
+  position: absolute;
+  top: 52px;
+  right: 0;
+  width: 200px;
+  background: linear-gradient(180deg, #2A1204, #3A1A08, #2A1406);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+  z-index: 1000;
+
+  animation: fadeIn 0.18s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown a,
+.dropdown button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  font-size: 14px;
+  font-family: 500;
+  color: #FFE2C2;
+  background: none;
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dropdown a:hover,
+.dropdown button:hover {
+  background: rgba(255, 162, 40, 0.12)
+}
+
+.divider {
+  height: 1px;
+  background: #eee;
+  margin: 6px 0;
+}
+
+.logout {
+  color: #ff4d4f;
+}
+
+.logout:hover {
+  background: #ff4d4f;
+  color: #fff;
+}
+
+.dropdown button {
+  font-family: inherit;
+}
+
+.dropdown a {
+  display: block;
+}
+
+.iconCircle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, #FF6432, #FFA228);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: 0.25s;
+  position: relative;
+}
+
+.iconCircle:hover {
+  transform: scale(1.12);
+}
+
+.iconCircle img {
+  width: 30px;
+  height: 30px;
+}

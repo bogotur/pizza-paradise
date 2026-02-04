@@ -1,0 +1,236 @@
+.home {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 0 1.5rem; 
+}
+
+.hero {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
+  box-sizing: border-box;
+  position: relative;
+  padding: 0; 
+}
+
+.backgroundImageTopRight {
+  position: absolute;
+  top: 0; 
+  right: 0;
+  width: 250px; 
+  height: auto;
+  z-index: 3; 
+  opacity: 1; 
+  transform: translateY(-20px) translateX(-85px); 
+}
+
+.backgroundImageBottomLeft {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 250px; 
+  height: auto;
+  z-index: 3;
+  opacity: 1;
+  transform: translateY(-10px) translateX(740px); 
+}
+
+.heroContent {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4rem 0; 
+  width: 100%; 
+  min-height: 100vh; 
+  box-sizing: border-box;
+  position: relative; 
+  z-index: 1; 
+}
+
+.left {
+  flex: 1;
+  color: white;
+  max-width: 550px;
+  z-index: 2; 
+}
+
+.title {
+  font-size: 4rem;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.pizzaWithLightning {
+  display: inline-flex; 
+  align-items: center; 
+  color: white; 
+}
+
+.pizzaText {
+  color: white;
+}
+
+.lightningIcon {
+  width: 2.6rem;
+  height: 3.6rem; 
+  margin: 0 0.5rem 0 0.5rem; 
+  vertical-align: middle;
+}
+
+.subtitle {
+  font-family: 'montserrat', sans-serif;
+  font-weight: 200;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: #e0e0e0;
+  line-height: 1.5;
+}
+
+.cooking {
+  margin-top: 2rem;
+  font-weight: 600;
+}
+
+.videoBox {
+  width: 220px;
+  height: 150px;
+  margin-top: 1rem;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  z-index: 2; 
+}
+
+.videoImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.4;
+}
+
+.playBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 55px;
+  height: 55px;
+  background: #f97316;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  box-shadow: 0 0 20px #f9731655;
+}
+
+.playBtn::after {
+  content: "";
+  position: absolute;
+  left: 55%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-left: 14px solid white;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+}
+
+.buttons {
+  display: flex;
+  gap: 0; 
+  margin-top: 2rem;
+  z-index: 2; 
+  
+  border-radius: 30px; 
+  border: 1px solid transparent; 
+  overflow: hidden; 
+  width: fit-content; 
+  
+  box-shadow: 
+    0 0 0 1px #FFA631,
+    0 0 0 2px #FF6939, 
+    0 0 15px rgba(255, 105, 57, 0.4); 
+    
+  transition: box-shadow 0.3s ease;
+}
+
+.orderBtn {
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: white;
+  
+  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%); 
+  border: none;
+  
+  border-radius: 30px 0 0 30px; 
+  
+  cursor: pointer;
+  transition: all 0.25s ease; 
+  
+  flex-shrink: 0; 
+  position: relative;
+  z-index: 10; 
+  width: 170px; 
+}
+
+.orderBtn:hover {
+  opacity: 0.95;
+}
+
+.buttons:has(.menuBtn:hover) .orderBtn {
+  background: #190a00; 
+  color: #f97316; 
+  z-index: 5; 
+  border-radius: 0; 
+  box-shadow: none;
+}
+
+.menuBtn {
+  padding: 0.9rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  
+  background: #190a00; 
+  background: linear-gradient(90deg, #f6b133 0%, #f97316 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  border: none;
+  
+  border-radius: 0 30px 30px 0;
+  
+  cursor: pointer;
+  transition: all 0.25s ease; 
+  
+  flex-shrink: 0;
+  
+  transform: translateX(-15px); 
+  z-index: 5;
+  position: relative;
+  
+  box-shadow: none; 
+}
+
+.menuBtn:hover {
+  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%); 
+  color: white; 
+  opacity: 1;
+  z-index: 10; 
+  transform: translateX(0); 
+}
+
+.right {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 2; 
+}
+
+.heroPizza {
+  width: 500px;
+  border-radius: 35px;
+  box-shadow: 0 0 40px #f9731640;
+}

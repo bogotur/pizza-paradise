@@ -1,0 +1,139 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.eventsPage {
+    width: 100%;
+    font-family: "Montserrat", sans-serif;
+    color: #fff;
+    background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
+    overflow: hidden;
+    padding: 5rem 0;
+}  
+
+.eventsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(4, 220px);
+    gap: 1.5rem;
+}
+
+.eventTextBlock {
+    grid-column: 3 / 5;
+    grid-row: 1 / 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding-left: 2rem;
+    align-self: center;
+    position: relative;
+    z-index: 5;
+}
+
+.eventTitle {
+    font-size: 4rem;
+    font-weight: 800;
+    text-align: right;
+    color: #fff;
+}
+
+.eventDescription {
+    font-size: 1.1rem;
+    font-weight: 200;
+    color: #ccc;
+    line-height: 1.5;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+    background-color: #2A1005;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    min-height: 180px;
+}
+
+.eventsGrid .card:nth-child(1) { grid-column: 2 / 4; grid-row: 1 / 2; } 
+.eventsGrid .card:nth-child(2) { grid-column: 1 / 2; grid-row: 1 / 2; } 
+.eventsGrid .card:nth-child(3) { grid-column: 1 / 3; grid-row: 2 / 3; } 
+.eventsGrid .card:nth-child(4) { grid-column: 3 / 5; grid-row: 2 / 3; }  
+.eventsGrid .card:nth-child(5) { grid-column: 1 / 2; grid-row: 3 / 4; } 
+.eventsGrid .card:nth-child(6) { grid-column: 2 / 3; grid-row: 3 / 4; } 
+.eventsGrid .card:nth-child(7) { grid-column: 3 / 5; grid-row: 3 / 4; }  
+
+
+.cardOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.2) 70%);
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+.cardTitle {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #fff;
+    z-index: 3;
+    padding-right: 1rem;
+}
+
+.specialCard {
+    border: 3px solid #f97316; 
+    box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+}
+
+.moreButton {
+    z-index: 2;
+    padding: 0.6rem 1.5rem;
+    border: none;
+    border-radius: 25px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    background: linear-gradient(90deg, #ff8c00 0%, #f97316 100%); 
+    transition: 0.2s;
+    align-self: flex-start; 
+    margin-top: auto; 
+}
+
+.moreButton:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 992px) {
+    .eventsGrid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto auto auto;
+        gap: 1rem;
+        min-height: auto;
+    }
+    
+    .eventTextBlock {
+        grid-column: 1 / 3;
+        grid-row: 4;
+        padding-left: 0;
+        margin-top: 2rem;
+        text-align: center;
+    }
+    
+    .eventsGrid .card:nth-child(2) { grid-area: auto; }
+    .eventsGrid .card:nth-child(4) { grid-area: auto; }
+    
+    .card {
+        grid-column: span 1 !important; 
+    }
+}
