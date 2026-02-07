@@ -16,10 +16,8 @@ interface Props {
   quantity: number;
   onClose: () => void;
 
-  // ✅ щоб Pizza.tsx отримав вибір і міг змінити ціну
   onApply: (payload: { ingredientIds: number[]; ingredientsPrice: number }) => void;
 
-  // ✅ щоб при повторному відкритті підсвічувало вибране
   initialSelectedIds?: number[];
 }
 
@@ -48,7 +46,6 @@ export default function IngredientsModal({
       });
   }, [pizzaId]);
 
-  // ✅ якщо відкрили модалку знову — підтягуємо минулі вибрані
   useEffect(() => {
     setSelected(new Set(initialSelectedIds));
   }, [pizzaId, initialSelectedIds]);
