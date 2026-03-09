@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import styles from '../styles/LoginModal.module.css'; // використовуємо той самий стиль
+import styles from '../styles/LoginModal.module.css'; 
 
 interface Props {
   onClose: () => void;

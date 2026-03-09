@@ -1,0 +1,76 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
+  color: #fff;
+}
+
+.card {
+  width: 420px;
+  max-width: 100%;
+  border-radius: 22px;
+  padding: 22px;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 153, 49, 0.28);
+  box-shadow: 0 0 30px rgba(255, 105, 57, 0.16);
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 900;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.form {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.input {
+  padding: 12px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 153, 49, 0.22);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  outline: none;
+}
+
+.error {
+  margin-top: 6px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 70, 70, 0.4);
+  background: rgba(255, 70, 70, 0.08);
+  color: #ffd1d1;
+}
+
+.btn {
+  margin-top: 8px;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%);
+  box-shadow: 0 0 0 1px #FFA631, 0 0 20px rgba(255, 105, 57, 0.25);
+}
+
+.btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}

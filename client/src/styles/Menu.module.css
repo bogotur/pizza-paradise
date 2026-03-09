@@ -7,8 +7,8 @@
 .menuPage {
     width: 100%;
     font-family: "Montserrat", sans-serif;
-    color: #fff; 
-    background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00); 
+    color: #fff;
+    background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
     overflow-x: hidden;
     min-height: 100vh;
 }
@@ -20,48 +20,50 @@
     padding-top: 3rem;
     margin-bottom: 2rem;
     color: #fff;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5); 
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
 .categoryButtons {
     display: flex;
     justify-content: center;
-    gap: 1rem; 
+    gap: 1rem;
     margin: 2rem 0 4rem;
+    flex-wrap: wrap;
 }
 
 .categoryButtons button {
-    font-family: "Montserrat", sans-serif; 
-    border-radius: 30px; 
+    font-family: "Montserrat", sans-serif;
+    border-radius: 30px;
     padding: 0.6rem 1.4rem;
     font-size: 1.2rem;
     cursor: pointer;
     transition: 0.3s;
-    color: #f5f5f5; 
+    color: #f5f5f5;
     font-weight: 300;
     letter-spacing: 0.5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     border: none;
+    background: transparent;
 }
 
 .categoryButtons button:hover {
     color: #f97316;
-    background: #2A1005; 
+    background: #2A1005;
 }
 
 .active {
-    background: linear-gradient(90deg,#FF5924 0%, #FFA229 100%); 
+    background: linear-gradient(90deg, #FF5924 0%, #FFA229 100%);
     color: #fff;
     border-radius: 30px;
-    padding: 0.8rem 2.5rem; 
+    padding: 0.8rem 2.5rem;
     font-weight: 800;
-    box-shadow: 0 5px 20px rgba(255, 140, 0, 0.5); 
+    box-shadow: 0 5px 20px rgba(255, 140, 0, 0.5);
     position: relative;
-    z-index: 1; 
+    z-index: 1;
 }
 
 .active::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -3px;
     left: -3px;
@@ -76,10 +78,11 @@
 
 .pizzaGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 12fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1.5rem;
     padding: 1rem 0;
     margin-bottom: 2rem;
+    align-items: stretch;
 }
 
 .pizzaCard {
@@ -93,6 +96,7 @@
     background: transparent;
     border-radius: 20px;
     transition: transform 0.3s ease;
+    height: 100%;
 }
 
 .pizzaCard:hover {
@@ -106,13 +110,18 @@
     border-radius: 50%;
     margin-bottom: 0.5rem;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    flex-shrink: 0;
 }
 
 .pizzaCard h4 {
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
     font-size: 1.8rem;
     font-weight: 500;
     margin-bottom: 0.3rem;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .pizzaCard p {
@@ -122,22 +131,22 @@
     max-width: 220px;
     line-height: 1.3rem;
     margin-bottom: 1rem;
-    min-height: 50px;
+    min-height: 62px;
 }
 
 .sizeSelection {
     display: flex;
     justify-content: center;
-    gap: 1.5rem; 
-    margin: 0.5rem 0 1.5rem 0; 
-    width: 100%; 
+    gap: 1.5rem;
+    margin: 0.5rem 0 1.5rem 0;
+    width: 100%;
 }
 
 .sizeCircle {
-    width: 42px; 
+    width: 42px;
     height: 42px;
     border-radius: 50%;
-    border: 1px solid #555; 
+    border: 1px solid #555;
     color: #ccc;
     display: flex;
     justify-content: center;
@@ -150,8 +159,8 @@
 
 .selectedSize {
     background: linear-gradient(90deg, #FF6432, #FFA228);
-    border: 1px solid transparent; 
-    color: white; 
+    border: 1px solid transparent;
+    color: white;
     transform: scale(1.05);
 }
 
@@ -185,6 +194,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
 }
 
 .price {
@@ -198,10 +208,10 @@
 .quantityControl {
     display: flex;
     align-items: center;
-    border: 1px solid #777; 
+    border: 1px solid #777;
     border-radius: 25px;
-    height: 35px; 
-    overflow: hidden; 
+    height: 35px;
+    overflow: hidden;
     padding: 0;
 }
 
@@ -215,7 +225,7 @@
 .quantityBtn {
     background: transparent;
     border: none;
-    color: #f97316; 
+    color: #f97316;
     font-size: 1.5rem;
     cursor: pointer;
     width: 35px;
@@ -232,7 +242,7 @@
     align-items: center;
     justify-content: center;
     padding: 0.8rem 1.3rem;
-    background: linear-gradient(90deg, #ff8c00 0%, #f97316 100%); 
+    background: linear-gradient(90deg, #ff8c00 0%, #f97316 100%);
     color: white;
     border: none;
     border-radius: 25px;
@@ -244,4 +254,56 @@
 
 .orderBtn:hover {
     opacity: 0.9;
+}
+
+@media (max-width: 992px) {
+    .pizzaGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .pageTitle {
+        font-size: 2.4rem;
+    }
+
+    .pizzaGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .priceAndQuantity {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+
+    .categoryButtons button {
+        font-size: 1rem;
+        padding: 0.55rem 1rem;
+    }
+
+    .active {
+        padding: 0.7rem 1.4rem;
+    }
+
+    .pizzaCard img {
+        width: 190px;
+        height: 190px;
+    }
+
+    .pizzaCard h4 {
+        font-size: 1.5rem;
+    }
+
+    .price {
+        font-size: 1.25rem;
+    }
+
+    .cardBottom {
+        width: 100%;
+    }
 }
