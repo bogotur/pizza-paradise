@@ -2,6 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { db } from '../db/connection.js';
+import { auth } from '../middleware/auth.js';
 
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey';
@@ -36,12 +37,27 @@ router.post('/login', async (req, res) => {
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) return res.status(400).json({ message: 'Невірний пароль' });
 
-    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
 
     res.json({ token });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Помилка сервера' });
+  }
+});
+
+router.get("/me", auth, async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      `SELECT id, email, role, created_at FROM users WHERE id = ? LIMIT 1`,
+      [req.user.id]
+    );
+
+    if (rows.length === 0) return res.status(404).json({ message: "User not found" });
+    res.json(rows[0]);
+  } catch (err) {
+    console.error("Auth me error:", err);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

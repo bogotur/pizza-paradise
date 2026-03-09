@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useMemo, useContext } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 import styles from "../styles/Menu.module.css";
 import IngredientsModal from "../components/IngredientsModal";
 import { CartContext } from "../context/CartContext";
-import LoginModal from "../components/LoginModal"; // ✅ додали
+import LoginModal from "../components/LoginModal";
 
 interface PizzaSize {
   size_cm: number;
@@ -35,7 +36,6 @@ const Pizza: React.FC = () => {
     new Map()
   );
 
-  // ✅ модалка логіну якщо не авторизований
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
@@ -59,9 +59,7 @@ const Pizza: React.FC = () => {
       .catch((err) => console.error("Error fetching pizzas:", err));
   }, []);
 
-  const handleCategoryChange = (category: string) => {
-    setActiveCategory(category);
-  };
+  const handleCategoryChange = (category: string) => setActiveCategory(category);
 
   const handleSizeChange = (pizzaId: number, sizeObj: PizzaSize) => {
     setSelectedSize((prev) => new Map(prev).set(pizzaId, sizeObj));
@@ -148,10 +146,8 @@ const Pizza: React.FC = () => {
               const currentQuantity = quantityMap.get(pizza.id) || 1;
 
               const baseTotal = (currentSize?.price || 0) * currentQuantity;
-
               const extrasOne = ingredientsPriceMap.get(pizza.id) || 0;
               const extrasTotal = extrasOne * currentQuantity;
-
               const finalTotal = baseTotal + extrasTotal;
 
               return (
@@ -193,6 +189,7 @@ const Pizza: React.FC = () => {
 
                       <div className={styles.quantityControl}>
                         <button
+                          type="button"
                           className={styles.quantityBtn}
                           onClick={() => handleQuantityChange(pizza.id, -1)}
                         >
@@ -200,6 +197,7 @@ const Pizza: React.FC = () => {
                         </button>
                         <span className={styles.quantity}>{currentQuantity}</span>
                         <button
+                          type="button"
                           className={styles.quantityBtn}
                           onClick={() => handleQuantityChange(pizza.id, 1)}
                         >
@@ -209,6 +207,7 @@ const Pizza: React.FC = () => {
                     </div>
 
                     <button
+                      type="button"
                       className={styles.orderBtn}
                       onClick={() => {
                         const size = selectedSize.get(pizza.id);
@@ -230,7 +229,10 @@ const Pizza: React.FC = () => {
 
                         if (!result.ok && result.reason === "NOT_AUTH") {
                           setIsLoginOpen(true);
+                          return;
                         }
+
+                        toast.success("Товар додано в кошик");
                       }}
                     >
                       Замовити
