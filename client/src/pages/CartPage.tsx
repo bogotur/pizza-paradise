@@ -1,9 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { CartContext } from "../context/CartContext";
 import styles from "../styles/CartPage.module.css";
 
 export default function CartPage() {
   const { items, total, removeItem, changeQty, clear } = useContext(CartContext);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   return (
     <div className={styles.cartPage}>
