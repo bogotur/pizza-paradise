@@ -44,7 +44,6 @@
   line-height: 1.5;
 }
 
-/* Список */
 .list {
   display: flex;
   flex-direction: column;
@@ -52,7 +51,6 @@
   margin-top: 1.5rem;
 }
 
-/* Картка позиції */
 .item {
   background: rgba(40, 15, 5, 0.88);
   border: 1px solid rgba(255, 166, 49, 0.22);
@@ -93,7 +91,6 @@
   line-height: 1.4;
 }
 
-/* Кількість */
 .qtyBox {
   display: flex;
   align-items: center;
@@ -132,7 +129,6 @@
   font-weight: 800;
 }
 
-/* Ціна */
 .price {
   width: 140px;
   text-align: right;
@@ -140,7 +136,6 @@
   font-weight: 900;
 }
 
-/* Видалити */
 .remove {
   width: 38px;
   height: 38px;
@@ -163,7 +158,6 @@
   color: #f97316;
 }
 
-/* Підсумок */
 .summary {
   display: flex;
   justify-content: space-between;
@@ -178,58 +172,138 @@
   font-weight: 900;
 }
 
-/* Кнопки як у hero */
 .buttons {
-  display: flex;
-  gap: 0;
-  border-radius: 30px;
+  position: relative;
+  display: inline-flex;
+  margin-top: 0;
+  border-radius: 999px;
+  padding: 4px;
   overflow: hidden;
   width: fit-content;
 
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 153, 49, 0.55);
+  box-shadow: 0 0 20px rgba(255, 105, 57, 0.22);
+}
+
+.buttons::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  border-radius: 999px;
+
+  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%);
   box-shadow:
-    0 0 0 1px #FFA631,
-    0 0 0 2px #FF6939,
-    0 0 15px rgba(255, 105, 57, 0.4);
+    0 0 0 1px rgba(255, 166, 49, 0.7),
+    0 0 22px rgba(255, 105, 57, 0.28);
+
+  transition: transform 260ms ease, box-shadow 260ms ease;
+  will-change: transform;
+}
+
+.buttons:hover::before {
+  transform: translateX(100%);
+}
+
+.checkoutBtn,
+.clearBtn {
+  position: relative;
+  z-index: 2;
+  padding: 0.9rem 2.4rem;
+  font-size: 1.08rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: transparent;
+  transition: color 260ms ease, opacity 260ms ease, transform 180ms ease;
+  line-height: 1;
+  min-width: 170px;
 }
 
 .checkoutBtn {
-  padding: 0.9rem 2.3rem;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: white;
-
-  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%);
-  border: none;
-
-  border-radius: 30px 0 0 30px;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.checkoutBtn:hover {
-  opacity: 0.95;
+  color: #fff;
 }
 
 .clearBtn {
-  padding: 0.9rem 2.3rem;
-  font-size: 1.05rem;
-  font-weight: 700;
-
-  background: #190a00;
-  background: linear-gradient(90deg, #f6b133 0%, #f97316 100%);
+  background-image: linear-gradient(90deg, #f6b133 0%, #f97316 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
-  border: none;
-  border-radius: 0 30px 30px 0;
-
-  cursor: pointer;
-  transition: all 0.25s ease;
-  transform: translateX(-15px);
 }
 
+.buttons:hover .clearBtn {
+  -webkit-text-fill-color: #fff;
+}
+
+.buttons:hover .checkoutBtn {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.checkoutBtn:hover,
 .clearBtn:hover {
-  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%);
-  -webkit-text-fill-color: transparent;
-  transform: translateX(0);
+  transform: translateY(-1px);
+}
+
+.checkoutBtn:focus-visible,
+.clearBtn:focus-visible {
+  outline: 2px solid rgba(255, 153, 49, 0.7);
+  outline-offset: 2px;
+}
+
+.checkoutForm {
+  margin-top: 18px;
+  border-radius: 22px;
+  padding: 16px;
+  background: rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,153,49,0.22);
+  box-shadow: 0 0 22px rgba(255,105,57,0.12);
+  backdrop-filter: blur(10px);
+}
+
+.formTitle {
+  font-size: 1.15rem;
+  font-weight: 900;
+  margin-bottom: 12px;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 780px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 153, 49, 0.22);
+  background: rgba(0,0,0,0.32);
+  color: #fff;
+  outline: none;
+  transition: 160ms ease;
+}
+
+.input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.input:focus {
+  border-color: rgba(255, 153, 49, 0.55);
+  box-shadow: 0 0 0 4px rgba(255, 105, 57, 0.14);
 }

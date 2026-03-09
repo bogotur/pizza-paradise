@@ -1,0 +1,200 @@
+.page {
+  min-height: 100vh;
+  padding: 110px 24px 28px;
+  background: linear-gradient(90deg, #1E0C00, #1F0700, #170A00, #1E0D00);
+  color: #fff;
+}
+
+.wrapper {
+  max-width: 980px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 18px;
+}
+
+@media (max-width: 920px) {
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  border-radius: 24px;
+  padding: 18px;
+  background: rgba(0, 0, 0, 0.34);
+  border: 1px solid rgba(255, 153, 49, 0.22);
+  box-shadow: 0 0 30px rgba(255, 105, 57, 0.14);
+  backdrop-filter: blur(10px);
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 0.2px;
+}
+
+.sub {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.bankCard {
+  border-radius: 22px;
+  padding: 18px;
+  border: 1px solid rgba(255, 153, 49, 0.26);
+  background:
+    radial-gradient(800px 260px at 20% 20%, rgba(255, 153, 49, 0.22), transparent 55%),
+    radial-gradient(800px 260px at 80% 10%, rgba(255, 105, 57, 0.18), transparent 55%),
+    rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 30px rgba(249, 115, 22, 0.12);
+}
+
+.brandRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  font-weight: 900;
+  letter-spacing: 1px;
+  opacity: 0.95;
+}
+
+.chip {
+  width: 44px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.03));
+  border: 1px solid rgba(255,255,255,0.16);
+}
+
+.cardNumberPreview {
+  margin-top: 18px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.cardMetaRow {
+  margin-top: 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: rgba(255,255,255,0.78);
+  font-size: 12px;
+}
+
+.cardMetaRow strong {
+  display: block;
+  font-size: 13px;
+  color: #fff;
+  margin-top: 3px;
+}
+
+.form {
+  margin-top: 14px;
+  display: grid;
+  gap: 10px;
+}
+
+.label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.72);
+  margin-bottom: 6px;
+}
+
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 153, 49, 0.22);
+  background: rgba(0,0,0,0.35);
+  color: #fff;
+  outline: none;
+  transition: 160ms ease;
+}
+
+.input::placeholder {
+  color: rgba(255,255,255,0.35);
+}
+
+.input:focus {
+  border-color: rgba(255, 153, 49, 0.55);
+  box-shadow: 0 0 0 4px rgba(255, 105, 57, 0.14);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.btn {
+  margin-top: 4px;
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  color: #fff;
+  background: linear-gradient(90deg, #FE9C1C 0%, #FF5E2A 100%);
+  box-shadow: 0 0 0 1px #FFA631, 0 0 20px rgba(255, 105, 57, 0.25);
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  opacity: 0.98;
+}
+
+.btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.note {
+  margin-top: 10px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.62);
+  line-height: 1.45;
+}
+
+.summaryTitle {
+  font-size: 18px;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+
+.summaryBox {
+  display: grid;
+  gap: 10px;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 153, 49, 0.18);
+  background: rgba(0,0,0,0.28);
+  color: rgba(255,255,255,0.85);
+}
+
+.summaryTotal {
+  font-size: 18px;
+  font-weight: 900;
+  color: #fff;
+}

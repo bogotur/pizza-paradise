@@ -1,17 +1,19 @@
 import { useState, useContext } from "react";
-import { HashLink } from "react-router-hash-link";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styles from "../styles/Navbar.module.css";
 import LoginModal from "./LoginModal";
 import { AuthContext } from "../context/AuthContext";
 import UserMenu from "./UserMenu";
 import { CartContext } from "../context/CartContext";
 
-const scrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth",
-  });
+const scrollToElement = (id: string) => {
+  const el = document.getElementById(id);
+  if (el) {
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
 };
 
 export default function Navbar() {
@@ -19,8 +21,30 @@ export default function Navbar() {
   const { user } = useContext(AuthContext);
   const { items } = useContext(CartContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const itemsCount = items.reduce((sum, x) => sum + x.quantity, 0);
+
+  const handleSectionNavigate = (sectionId: string) => {
+    if (location.pathname === "/") {
+      scrollToElement(sectionId);
+      return;
+    }
+
+    navigate("/", { state: { scrollTo: sectionId } });
+  };
+
+  const handleHomeClick = () => {
+    if (location.pathname === "/") {
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth",
+      });
+      return;
+    }
+
+    navigate("/");
+  };
 
   return (
     <>
@@ -28,37 +52,53 @@ export default function Navbar() {
         <div className={styles.container}>
           <div className={styles.navContent}>
             <div className={styles.brandContainer}>
-              <HashLink to="/" className={styles.brandLink} onClick={scrollToTop}>
+              <button
+                type="button"
+                className={styles.brandLink}
+                onClick={handleHomeClick}
+              >
                 <span className={styles.brand}>pizzaParadise</span>
-              </HashLink>
+              </button>
             </div>
 
             <ul className={styles.menu}>
               <li>
-                <HashLink to="#top" smooth>
+                <button type="button" onClick={handleHomeClick}>
                   Головна
-                </HashLink>
+                </button>
               </li>
               <li>
-                <HashLink to="#menu-section" smooth>
+                <button
+                  type="button"
+                  onClick={() => handleSectionNavigate("menu-section")}
+                >
                   Меню
-                </HashLink>
+                </button>
               </li>
               <li>
-                <HashLink to="#events-section" smooth>
+                <button
+                  type="button"
+                  onClick={() => handleSectionNavigate("events-section")}
+                >
                   Події
-                </HashLink>
+                </button>
               </li>
               <li>
-                <HashLink to="#about-section" smooth>
+                <button
+                  type="button"
+                  onClick={() => handleSectionNavigate("about-section")}
+                >
                   Про нас
-                </HashLink>
+                </button>
               </li>
             </ul>
 
             <div className={styles.rightSection}>
               {!user && (
-                <button className={styles.signin} onClick={() => setIsLoginOpen(true)}>
+                <button
+                  className={styles.signin}
+                  onClick={() => setIsLoginOpen(true)}
+                >
                   Вхід
                 </button>
               )}

@@ -18,10 +18,8 @@
   color: #fff;
   position: relative;
 
-  /* основа як у сайті */
   background: linear-gradient(180deg, #2A1204 0%, #3A1A08 45%, #2A1406 100%);
 
-  /* акуратна рамка і світіння */
   border: 1px solid rgba(255, 162, 40, 0.18);
   box-shadow:
     0 18px 60px rgba(0, 0, 0, 0.65),
@@ -31,7 +29,6 @@
   animation: scaleIn 0.22s ease-out;
 }
 
-/* легкий “shine” зверху як преміум картки */
 .modal::before {
   content: "";
   position: absolute;
@@ -84,7 +81,6 @@
   margin: 0 0 16px;
 }
 
-/* Контент із скролом (щоб футер був завжди видно) */
 .list {
   max-height: 360px;
   overflow-y: auto;
@@ -93,7 +89,7 @@
   gap: 10px;
 
   padding-right: 6px;
-  margin-right: -6px; /* щоб scrollbar не з’їдав ширину */
+  margin-right: -6px; 
 }
 
 .list::-webkit-scrollbar {
