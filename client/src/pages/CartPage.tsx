@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast from "react-hot-toast";
-
 import { CartContext } from "../context/CartContext";
 import styles from "../styles/CartPage.module.css";
 
@@ -196,6 +195,10 @@ export default function CartPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
 
   return (
     <div className={styles.cartPage}>
