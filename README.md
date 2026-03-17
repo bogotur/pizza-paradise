@@ -104,9 +104,3 @@ showcase TypeScript usage across the entire stack
 practice real-world client–server interaction
 
 serve as a portfolio project
-
-👤 Author
-
-Oleksiy Melnyk
-
-GitHub: https://github.com/bogotur
