@@ -1,61 +1,54 @@
-import express from 'express';
-import { db } from '../db/connection.js';
+import express from "express";
+import pool from "../db.js";
 
 const router = express.Router();
 
-const PIZZA_SIZES_QUERY = `
-    SELECT
-        p.id,
-        p.name,
-        p.description,
-        p.image,
-        c.name AS category,
-        ps.size_cm,
-        ps.price
-    FROM
-        Pizzas p
-    JOIN
-        Pizza_Sizes ps ON p.id = ps.pizza_id
-    JOIN
-        Categories c ON p.category_id = c.id 
-    ORDER BY
-        p.id, ps.size_cm;
-`;
+router.get("/", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT
+          p.id,
+          p.name,
+          p.description,
+          p.image,
+          c.name AS category,
+          ps.size_cm,
+          ps.price
+      FROM
+          pizzas p
+      JOIN
+          pizza_sizes ps ON p.id = ps.pizza_id
+      JOIN
+          categories c ON p.category_id = c.id
+      ORDER BY
+          p.id, ps.size_cm;
+    `);
 
-router.get('/', async (req, res) => {
-    try {
-        const [results] = await db.query(PIZZA_SIZES_QUERY);
+    const pizzasMap = new Map();
 
-        const groupedPizzas = results.reduce((acc, row) => {
-            const { id, name, description, image, category, size_cm, price } = row;
+    for (const row of rows) {
+      if (!pizzasMap.has(row.id)) {
+        pizzasMap.set(row.id, {
+          id: row.id,
+          name: row.name,
+          description: row.description,
+          image: row.image,
+          category: row.category,
+          sizes: [],
+        });
+      }
 
-            let pizza = acc.find(p => p.id === id);
-
-            if (!pizza) {
-                pizza = {
-                    id,
-                    name,
-                    description,
-                    image,
-                    category,
-                    sizes: []
-                };
-                acc.push(pizza);
-            }
-
-            pizza.sizes.push({
-                size_cm,
-                price: parseFloat(price)
-            });
-
-            return acc;
-        }, []);
-
-        res.json(groupedPizzas);
-    } catch (err) {
-        console.error('DB error:', err);
-        res.status(500).json({ error: 'Database query error' });
+      pizzasMap.get(row.id).sizes.push({
+        size_cm: row.size_cm,
+        price: Number(row.price),
+      });
     }
+
+    res.json(Array.from(pizzasMap.values()));
+  } catch (error) {
+    console.error("DB error:", error);
+    res.status(500).json({ error: "Database query error" });
+  }
 });
 
 export default router;
