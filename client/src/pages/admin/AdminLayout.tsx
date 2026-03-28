@@ -1,5 +1,5 @@
-import React, { useContext, useState } from "react";
-import { NavLink, Navigate, Outlet, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import PageLoader from "../../components/PageLoader";
