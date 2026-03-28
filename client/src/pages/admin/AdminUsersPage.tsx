@@ -163,6 +163,34 @@ export default function AdminUsersPage() {
     }
   };
 
+  const deleteUser = async (id: number) => {
+  if (!token) return;
+
+  const confirmDelete = window.confirm("Точно видалити користувача?");
+  if (!confirmDelete) return;
+
+  const prev = users;
+
+  setUsers((p) => p.filter((u) => u.id !== id));
+
+  if (selectedUser?.id === id) {
+    closeModal();
+  }
+
+  try {
+    await api.delete(`/api/admin/users/${id}`);
+    toast.success("Користувача видалено");
+  } catch (err: unknown) {
+    setUsers(prev);
+
+    if (axios.isAxiosError(err)) {
+      toast.error(err.response?.data?.message || "Не вдалося видалити");
+    } else {
+      toast.error("Не вдалося видалити");
+    }
+  }
+};
+
   const formatDate = (s: string | null) => {
     if (!s) return "—";
     const d = new Date(s);
@@ -323,6 +351,13 @@ export default function AdminUsersPage() {
 
                     <button className={styles.detailsBtn} onClick={() => openDetails(u)}>
                       Деталі
+                    </button>
+
+                    <button
+                      className={styles.deleteBtn}
+                      onClick={() => deleteUser(u.id)}
+                    >
+                      Видалити
                     </button>
                   </div>
                 </div>

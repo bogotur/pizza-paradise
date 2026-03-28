@@ -39,35 +39,21 @@ export default function AdminLayout() {
             end
             className={({ isActive }) => (isActive ? styles.active : styles.link)}
           >
-            🏠 Головна
+             Головна
           </NavLink>
 
           <NavLink
             to="/admin/orders"
             className={({ isActive }) => (isActive ? styles.active : styles.link)}
           >
-            📦 Замовлення
-          </NavLink>
-
-          <NavLink
-            to="/admin/menu"
-            className={({ isActive }) => (isActive ? styles.active : styles.link)}
-          >
-            🍕 Меню (скоро)
-          </NavLink>
-
-          <NavLink
-            to="/admin/ingredients"
-            className={({ isActive }) => (isActive ? styles.active : styles.link)}
-          >
-            🧀 Інгредієнти (скоро)
+             Замовлення
           </NavLink>
 
           <NavLink
             to="/admin/users"
             className={({ isActive }) => (isActive ? styles.active : styles.link)}
           >
-            💼 Користувачі
+             Користувачі
           </NavLink>
         </nav>
 

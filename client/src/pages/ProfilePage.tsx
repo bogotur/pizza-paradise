@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import PageLoader from "../components/PageLoader";
 import styles from "../styles/ProfilePage.module.css";
 
-type TabKey = "profile" | "orders" | "settings";
+type TabKey = "profile" | "orders";
 
 type Profile = {
   id: number;
@@ -30,7 +30,7 @@ const statusUa: Record<string, string> = {
   paid: "сплачено",
   cooking: "готується",
   delivering: "у доставці",
-  done: "готове",
+  done: "доставлено",
   canceled: "скасоване",
 };
 
@@ -98,7 +98,7 @@ export default function ProfilePage() {
 
   const logout = () => {
     localStorage.removeItem("token");
-    toast("Ви вийшли з акаунта 👋", { icon: "✅" });
+    toast("Ви вийшли з акаунта");
     navigate("/", { replace: true });
   };
 
@@ -133,20 +133,6 @@ export default function ProfilePage() {
                 👤 Профіль
               </button>
 
-              <button
-                className={`${styles.navItem} ${tab === "orders" ? styles.navActive : ""}`}
-                onClick={() => setTab("orders")}
-              >
-                📦 Мої замовлення
-              </button>
-
-              <button
-                className={`${styles.navItem} ${tab === "settings" ? styles.navActive : ""}`}
-                onClick={() => setTab("settings")}
-              >
-                ⚙️ Налаштування
-              </button>
-
               <div className={styles.sidebarHint}>
                 <div className={styles.hintTitle}>Швидко</div>
                 <div className={styles.hintText}>
@@ -164,12 +150,7 @@ export default function ProfilePage() {
                     <div className={styles.row}>
                       <div className={styles.label}>Email</div>
                       <div className={styles.value}>{profile?.email || <span className={styles.pill}>—</span>}</div>
-                    </div>
-
-                    <div className={styles.row}>
-                      <div className={styles.label}>Роль</div>
-                      <div className={styles.value}>{profile?.role || "user"}</div>
-                    </div>
+                    </div>             
 
                     <div className={styles.row}>
                       <div className={styles.label}>Створено</div>
@@ -235,24 +216,6 @@ export default function ProfilePage() {
                       ))}
                     </div>
                   )}
-                </div>
-              )}
-
-              {tab === "settings" && (
-                <div className={styles.card}>
-                  <div className={styles.cardTitle}>Налаштування</div>
-
-                  <div className={styles.setting}>
-                    <div>
-                      <div className={styles.settingTitle}>Скоро</div>
-                      <div className={styles.settingText}>
-                        Зміна пароля, оновлення профілю, сповіщення
-                      </div>
-                    </div>
-                    <button className={styles.ghostBtn} type="button" disabled>
-                      У розробці
-                    </button>
-                  </div>
                 </div>
               )}
             </main>

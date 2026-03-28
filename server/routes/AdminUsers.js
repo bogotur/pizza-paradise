@@ -142,4 +142,63 @@ router.patch("/:id/role", auth, adminOnly, async (req, res) => {
   }
 });
 
+router.delete("/:id", auth, adminOnly, async (req, res) => {
+  const id = Number(req.params.id);
+
+  if (!id) {
+    return res.status(400).json({ message: "Invalid id" });
+  }
+
+  let conn;
+  try {
+    if (req.user.id === id) {
+      return res.status(400).json({ message: "Не можна видалити самого себе" });
+    }
+
+    const [users] = await db.query(
+      `SELECT id, role FROM users WHERE id = ? LIMIT 1`,
+      [id]
+    );
+
+    if (!users.length) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = users[0];
+
+    if (user.role === "admin") {
+      const [admins] = await db.query(
+        `SELECT COUNT(*) AS count FROM users WHERE role = 'admin'`
+      );
+
+      if (Number(admins[0].count) <= 1) {
+        return res.status(400).json({
+          message: "Має залишитися хоча б один admin",
+        });
+      }
+    }
+
+    conn = await db.getConnection();
+    await conn.beginTransaction();
+
+    await conn.query(`DELETE FROM orders WHERE user_id = ?`, [id]);
+
+    const [result] = await conn.query(`DELETE FROM users WHERE id = ?`, [id]);
+
+    if (!result.affectedRows) {
+      await conn.rollback();
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    await conn.commit();
+    res.json({ success: true });
+  } catch (err) {
+    if (conn) await conn.rollback();
+    console.error("Admin delete user error:", err);
+    res.status(500).json({ message: "Server error" });
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
 export default router;

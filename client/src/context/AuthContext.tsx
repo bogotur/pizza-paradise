@@ -6,7 +6,7 @@ interface User {
 
 interface AuthContextType {
   user: User | null;
-  login: (userData: User) => void;
+  login: (userData: User, token: string) => void;
   logout: () => void;
 }
 
@@ -22,11 +22,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
-    if (token && email) setUser({ email });
+
+    if (token && email) {
+      setUser({ email });
+    }
   }, []);
 
-  const login = (userData: User) => {
+  const login = (userData: User, token: string) => {
     setUser(userData);
+    localStorage.setItem("token", token);
     localStorage.setItem("email", userData.email);
   };
 

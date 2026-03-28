@@ -38,7 +38,8 @@
 .search,
 .select,
 .refresh,
-.detailsBtn {
+.detailsBtn,
+.deleteBtn {
   border-radius: 14px;
   border: 1px solid rgba(255, 153, 49, 0.16);
   background: rgba(0, 0, 0, 0.28);
@@ -63,12 +64,14 @@
 }
 
 .refresh:hover,
-.detailsBtn:hover {
+.detailsBtn:hover,
+.deleteBtn:hover {
   transform: translateY(-1px);
 }
 
 .refresh:disabled,
 .detailsBtn:disabled,
+.deleteBtn:disabled,
 .select:disabled {
   opacity: 0.55;
   cursor: not-allowed;
@@ -241,6 +244,18 @@
   border-color: rgba(255, 153, 49, 0.22);
   background: linear-gradient(180deg, rgba(255, 153, 49, 0.16), rgba(255, 105, 57, 0.10));
   box-shadow: 0 0 18px rgba(255, 105, 57, 0.12);
+}
+
+.deleteBtn {
+  padding: 12px 14px;
+  cursor: pointer;
+  border-color: rgba(239, 68, 68, 0.32);
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.12), rgba(0, 0, 0, 0.18));
+}
+
+.deleteBtn:hover {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 0 26px rgba(239, 68, 68, 0.14);
 }
 
 .empty {
@@ -508,7 +523,8 @@
   }
 
   .actions .select,
-  .detailsBtn {
+  .detailsBtn,
+  .deleteBtn {
     width: 100%;
   }
 

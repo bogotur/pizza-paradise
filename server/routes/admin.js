@@ -12,7 +12,7 @@ router.get('/me', auth, async (req, res) => {
     )
 
     if (rows.length === 0) return res.status(401).json({ message: 'Unauthorized' })
-    if (rows[0].role !== 'admin') return res.status(403).json({ message: 'Forbidden' })
+    if (rows[0].role !== 'admin') return res.status(403).json({ message: 'Ви не є адміністратором' })
 
     res.json({ success: true, admin: { id: rows[0].id, email: rows[0].email } })
   } catch (err) {

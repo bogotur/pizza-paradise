@@ -299,30 +299,6 @@
 .badge[data-status="done"] { background: rgba(16, 185, 129, 0.12); border-color: rgba(16, 185, 129, 0.22); }
 .badge[data-status="canceled"] { background: rgba(239, 68, 68, 0.12); border-color: rgba(239, 68, 68, 0.22); }
 
-.setting {
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 153, 49, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  align-items: center;
-}
-
-.settingTitle {
-  font-weight: 1000;
-}
-
-.settingText {
-  margin-top: 6px;
-  opacity: 0.75;
-  font-weight: 750;
-  font-size: 13px;
-  line-height: 1.4;
-}
-
 .ghostBtn {
   border-radius: 14px;
   padding: 12px 14px;

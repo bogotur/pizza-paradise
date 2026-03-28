@@ -219,10 +219,6 @@ export default function PaymentPage() {
             <button className={styles.btn} onClick={payFake} disabled={loading}>
               {loading ? "Опрацьовуємо..." : "Підтвердити оплату"}
             </button>
-
-            <div className={styles.note}>
-              Тестова оплата: дані картки не зберігаються (лише останні 4 цифри).
-            </div>
           </div>
         </div>
 
@@ -246,10 +242,6 @@ export default function PaymentPage() {
                 {Number(total || 0).toFixed(2)} ₴
               </span>
             </div>
-          </div>
-
-          <div className={styles.note} style={{ marginTop: 12 }}>
-            Якщо сума 0 — значить кошик очищено або ти зайшов на оплату напряму.
           </div>
         </div>
       </div>

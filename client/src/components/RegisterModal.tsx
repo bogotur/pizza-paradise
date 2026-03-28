@@ -1,20 +1,53 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
-import styles from '../styles/LoginModal.module.css'; 
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { AuthContext } from '../context/AuthContext';
+import styles from '../styles/LoginModal.module.css';
 
 interface Props {
   onClose: () => void;
+  onBackToLogin?: () => void;
 }
 
-const RegisterModal: React.FC<Props> = ({ onClose }) => {
+const RegisterModal: React.FC<Props> = ({ onClose, onBackToLogin }) => {
+  const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const finishAuth = (userEmail: string, token: string) => {
+    login({ email: userEmail }, token);
+
+    setSuccess(true);
+    toast.success("Акаунт успішно створено 🎉");
+
+    setTimeout(() => {
+      onClose();
+      navigate('/');
+    }, 2300);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+
+    const trimmedEmail = email.trim().toLowerCase();
+
+    if (!trimmedEmail) {
+      setError('Введіть email');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Пароль має містити щонайменше 6 символів');
+      return;
+    }
 
     if (password !== confirmPassword) {
       setError('Паролі не збігаються');
@@ -22,31 +55,74 @@ const RegisterModal: React.FC<Props> = ({ onClose }) => {
     }
 
     try {
-      const res = await axios.post('http://localhost:5000/api/auth/register', {
-        email,
+      setLoading(true);
+
+      const registerRes = await axios.post('http://localhost:5000/api/auth/register', {
+        email: trimmedEmail,
         password,
       });
 
-      console.log('REGISTER RESPONSE:', res.data);
-
-      if (res.data.message) {
-        setSuccess(res.data.message);
-        setError('');
+      if (registerRes.data?.token) {
+        finishAuth(
+          registerRes.data?.user?.email || trimmedEmail,
+          registerRes.data.token
+        );
+        return;
       }
+
+      const loginRes = await axios.post('http://localhost:5000/api/auth/login', {
+        email: trimmedEmail,
+        password,
+      });
+
+      if (loginRes.data?.token) {
+        finishAuth(
+          loginRes.data?.user?.email || trimmedEmail,
+          loginRes.data.token
+        );
+        return;
+      }
+
+      setError('Реєстрація пройшла, але не вдалося авторизуватись');
     } catch (err) {
-      console.error(err);
       if (axios.isAxiosError(err)) {
-        setError(err.response?.data?.message || 'Помилка реєстрації');
+        const msg = err.response?.data?.message || 'Помилка реєстрації';
+        setError(msg);
+        toast.error(msg);
       } else {
         setError('Невідома помилка');
+        toast.error('Невідома помилка');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
+  if (success) {
+    return (
+      <div className={styles.overlay}>
+        <div className={styles.loginCard}>
+          <div className={styles.successWrapper}>
+            <div className={styles.successIcon}></div>
+
+            <h1 className={styles.title}>Готово!</h1>
+            <p className={styles.subtitle}>Акаунт успішно створено</p>
+
+            <div className={styles.successBar}>
+              <div className={styles.successBarFill}></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.loginCard} onClick={e => e.stopPropagation()}>
-        <button className={styles.close} onClick={onClose}>✕</button>
+      <div className={styles.loginCard} onClick={(e) => e.stopPropagation()}>
+        <button className={styles.close} onClick={onClose} disabled={loading}>
+          ✕
+        </button>
 
         <h1 className={styles.title}>Реєстрація</h1>
         <p className={styles.subtitle}>Створіть новий акаунт</p>
@@ -57,8 +133,9 @@ const RegisterModal: React.FC<Props> = ({ onClose }) => {
             type="email"
             placeholder="Email"
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             required
+            disabled={loading}
           />
 
           <label>Пароль</label>
@@ -66,8 +143,9 @@ const RegisterModal: React.FC<Props> = ({ onClose }) => {
             type="password"
             placeholder="Пароль"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={(e) => setPassword(e.target.value)}
             required
+            disabled={loading}
           />
 
           <label>Підтвердіть пароль</label>
@@ -75,17 +153,21 @@ const RegisterModal: React.FC<Props> = ({ onClose }) => {
             type="password"
             placeholder="Підтвердіть пароль"
             value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
+            onChange={(e) => setConfirmPassword(e.target.value)}
             required
+            disabled={loading}
           />
 
           {error && <p className={styles.error}>{error}</p>}
-          {success && <p style={{color: '#4BB543', fontSize: '0.85rem'}}>{success}</p>}
 
-          <button type="submit" className={styles.loginBtn}>Зареєструватися</button>
+          <button className={styles.loginBtn} disabled={loading}>
+            {loading ? 'Реєстрація...' : 'Зареєструватися'}
+          </button>
         </form>
 
-        <p className={styles.back} onClick={onClose}>Повернутися назад</p>
+        <p className={styles.back} onClick={onBackToLogin}>
+          Уже є акаунт? Увійти
+        </p>
       </div>
     </div>
   );
