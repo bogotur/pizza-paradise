@@ -1,0 +1,8 @@
+{
+  "name": "pizza-paradise-monorepo",
+  "private": true,
+  "scripts": {
+    "start": "cd server && npm start",
+    "install:server": "cd server && npm install"
+  }
+}
