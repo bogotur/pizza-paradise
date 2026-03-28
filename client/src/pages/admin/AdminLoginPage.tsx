@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { api } from "../../api/api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 import PageLoader from "../../components/PageLoader";
 import styles from "../../styles/AdminLoginPage.module.css";
-
-const API = "http://localhost:5000";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -24,7 +23,7 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API}/api/auth/login`, { email, password });
+      const res = await api.post("/api/auth/login", { email, password });
 
       if (!res.data?.token) {
         setError("Помилка входу");
@@ -34,7 +33,7 @@ export default function AdminLoginPage() {
 
       localStorage.setItem("token", res.data.token);
 
-      await axios.get(`${API}/api/admin/me`, {
+      await api.get("/api/admin/me", {
         headers: { Authorization: `Bearer ${res.data.token}` },
       });
 

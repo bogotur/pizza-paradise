@@ -5,8 +5,6 @@ import toast from "react-hot-toast";
 import PageLoader from "../../components/PageLoader";
 import styles from "../../styles/AdminUsersPage.module.css";
 
-const API = "http://localhost:5000";
-
 type UserRow = {
   id: number;
   email: string;
@@ -78,7 +76,7 @@ export default function AdminUsersPage() {
 
   const api = useMemo(() => {
     return axios.create({
-      baseURL: API,
+      baseURL: import.meta.env.VITE_API_URL,
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }, [token]);

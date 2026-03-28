@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
+import { api } from "../api/api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
@@ -22,8 +23,6 @@ type MyOrder = {
   created_at: string | null;
   transaction_id: string | null;
 };
-
-const API = "http://localhost:5000";
 
 const statusUa: Record<string, string> = {
   pending: "в очікуванні",
@@ -74,8 +73,8 @@ export default function ProfilePage() {
       const headers = { Authorization: `Bearer ${token}` };
 
       const [meRes, myOrdersRes] = await Promise.all([
-        axios.get(`${API}/api/auth/me`, { headers }),
-        axios.get(`${API}/api/orders/my`, { headers }),
+        api.get("/api/auth/me", { headers }),
+        api.get("/api/orders/my", { headers }),
       ]);
 
       setProfile(meRes.data);

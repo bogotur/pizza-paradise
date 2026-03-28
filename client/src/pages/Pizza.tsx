@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useMemo, useContext } from "react";
-import axios from "axios";
+import React, { useEffect, useMemo, useState, useContext } from "react";
 import toast from "react-hot-toast";
 import styles from "../styles/Menu.module.css";
 import IngredientsModal from "../components/IngredientsModal";
 import { CartContext } from "../context/CartContext";
 import LoginModal from "../components/LoginModal";
+import { api } from "../api/api";
 
 interface PizzaSize {
   size_cm: number;
@@ -39,13 +39,13 @@ const Pizza: React.FC = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get<Pizza[]>("http://localhost:5000/api/menu/")
+    api
+      .get<Pizza[]>("/api/menu/")
       .then((res) => {
         const fetchedPizzas = res.data;
         setPizzas(fetchedPizzas);
 
-        const initialSizes = new Map(
+        const initialSizes = new Map<number, PizzaSize>(
           fetchedPizzas.map((pizza) => [
             pizza.id,
             pizza.sizes.find((s) => s.size_cm === 28) || pizza.sizes[0],
@@ -53,10 +53,14 @@ const Pizza: React.FC = () => {
         );
         setSelectedSize(initialSizes);
 
-        const initialQuantity = new Map(fetchedPizzas.map((pizza) => [pizza.id, 1]));
+        const initialQuantity = new Map<number, number>(
+          fetchedPizzas.map((pizza) => [pizza.id, 1])
+        );
         setQuantityMap(initialQuantity);
       })
-      .catch((err) => console.error("Error fetching pizzas:", err));
+      .catch((err) => {
+        console.error("Error fetching pizzas:", err);
+      });
   }, []);
 
   const handleCategoryChange = (category: string) => setActiveCategory(category);
@@ -152,10 +156,7 @@ const Pizza: React.FC = () => {
 
               return (
                 <div key={pizza.id} className={styles.pizzaCard}>
-                  <img
-                    src={`http://localhost:5000/assets/pizza/${pizza.image}`}
-                    alt={pizza.name}
-                  />
+                  <img src={`/api/assets/pizza/${pizza.image}`} alt={pizza.name} />
 
                   <h4>{pizza.name}</h4>
                   <p>{pizza.description}</p>

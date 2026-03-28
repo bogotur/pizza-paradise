@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import styles from "../styles/IngredientsModal.module.css";
+import { api } from "../api/api"
 
 interface Ingredient {
   id: number;
@@ -36,8 +36,8 @@ export default function IngredientsModal({
 
   useEffect(() => {
     setError("");
-    axios
-      .get<Ingredient[]>(`http://localhost:5000/api/pizzas/${pizzaId}/ingredients`)
+    api
+      .get<Ingredient[]>(`/api/pizzas/${pizzaId}/ingredients`)
       .then((res) => setIngredients(res.data))
       .catch((e) => {
         console.error(e);

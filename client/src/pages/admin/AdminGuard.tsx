@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { api } from "../../api/api";
 import { useNavigate } from "react-router-dom";
 import PageLoader from "../../components/PageLoader";
-
-const API = "http://localhost:5000";
 
 export default function AdminGuard({ children }: { children: React.ReactNode }) {
   const [checking, setChecking] = useState(true);
@@ -18,7 +16,7 @@ export default function AdminGuard({ children }: { children: React.ReactNode }) 
       }
 
       try {
-        await axios.get(`${API}/api/admin/me`, {
+        await api.get("/api/admin/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setChecking(false);

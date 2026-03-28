@@ -1,13 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { api } from "../api/api";
 import toast from "react-hot-toast";
 import { CartContext } from "../context/CartContext";
 import styles from "../styles/CartPage.module.css";
 
 type IngredientRow = { id: number; name: string };
-
-const API_URL = "http://localhost:5000";
 
 const normalizePhone = (value: string) => {
   return value.replace(/[^\d+]/g, "");
@@ -94,7 +93,7 @@ export default function CartPage() {
   useEffect(() => {
     const loadIngredients = async () => {
       try {
-        const res = await axios.get(`${API_URL}/api/ingredients`);
+        const res = await api.get("/api/ingredients");
         const map: Record<number, string> = {};
 
         (res.data as IngredientRow[]).forEach((x) => {
@@ -171,8 +170,8 @@ export default function CartPage() {
         };
       });
 
-      const res = await axios.post(
-        `${API_URL}/api/orders`,
+      const res = await api.post(
+        "/api/orders",
         {
           customer_name: customerName.trim(),
           customer_phone: normalizePhone(customerPhone),
@@ -218,7 +217,7 @@ export default function CartPage() {
                     <div key={x.cartId} className={styles.item}>
                       <img
                         className={styles.img}
-                        src={`${API_URL}/assets/pizza/${x.image}`}
+                        src={"/api/assets/pizza/${x.image}"}
                         alt={x.name}
                       />
 

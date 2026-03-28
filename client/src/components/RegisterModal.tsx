@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
+import { api } from '../api/api';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { AuthContext } from '../context/AuthContext';
@@ -57,7 +58,7 @@ const RegisterModal: React.FC<Props> = ({ onClose, onBackToLogin }) => {
     try {
       setLoading(true);
 
-      const registerRes = await axios.post('http://localhost:5000/api/auth/register', {
+      const registerRes = await api.post('/api/auth/register', {
         email: trimmedEmail,
         password,
       });
@@ -70,7 +71,7 @@ const RegisterModal: React.FC<Props> = ({ onClose, onBackToLogin }) => {
         return;
       }
 
-      const loginRes = await axios.post('http://localhost:5000/api/auth/login', {
+      const loginRes = await api.post('/api/auth/login', {
         email: trimmedEmail,
         password,
       });

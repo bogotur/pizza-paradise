@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useContext } from "react";
 import axios from "axios";
+import { api } from "../api/api";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -111,8 +112,8 @@ export default function PaymentPage() {
       setStep("confirming");
       await sleep(700 + Math.random() * 700);
 
-      const res = await axios.post(
-        "http://localhost:5000/api/payments/fake",
+      const res = await api.post(
+        "/api/payments/fake",
         { orderId: Number(orderId), card_last4: last4 },
         { headers: { Authorization: `Bearer ${token}` } }
       );

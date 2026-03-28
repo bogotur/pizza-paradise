@@ -6,8 +6,6 @@ import { useNavigate } from "react-router-dom";
 import PageLoader from "../components/PageLoader";
 import styles from "../styles/MyOrdersPage.module.css";
 
-const API = "http://localhost:5000";
-
 type MyOrder = {
   id: number;
   total: number;
@@ -104,7 +102,7 @@ export default function MyOrdersPage() {
 
   const api = useMemo(() => {
     return axios.create({
-      baseURL: API,
+      baseURL: import.meta.env.VITE_API_URL,
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }, [token]);
@@ -352,7 +350,7 @@ export default function MyOrdersPage() {
                 <div className={styles.items}>
                   {items.map((it) => (
                     <div key={it.id} className={styles.itemRow}>
-                      <img className={styles.itemImg} src={`${API}/assets/pizza/${it.image}`} alt={it.name} />
+                      <img className={styles.itemImg} src={"/api/assets/pizza/${it.image}"} alt={it.name} />
 
                       <div className={styles.itemInfo}>
                         <div className={styles.itemName}>{it.name}</div>

@@ -5,8 +5,6 @@ import toast from "react-hot-toast";
 import PageLoader from "../../components/PageLoader";
 import styles from "../../styles/AdminOrdersPage.module.css";
 
-const API = "http://localhost:5000";
-
 type OrderRow = {
   id: number;
   user_id: number | null;
@@ -99,7 +97,7 @@ export default function AdminOrdersPage() {
 
   const api = useMemo(() => {
     return axios.create({
-      baseURL: API,
+      baseURL: import.meta.env.VITE_API_URL,
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
     });
   }, [token]);
@@ -537,7 +535,7 @@ export default function AdminOrdersPage() {
               <div className={styles.itemsList}>
                 {items.map((it) => (
                   <div key={it.id} className={styles.itemRow}>
-                    <img className={styles.itemImg} src={`${API}/assets/pizza/${it.image}`} alt={it.name} />
+                    <img className={styles.itemImg} src={"api/assets/pizza/${it.image}"} alt={it.name} />
 
                     <div className={styles.itemInfo}>
                       <div className={styles.itemName}>{it.name}</div>
