@@ -76,31 +76,3 @@ MySQL is used as the main database
 phpMyAdmin is used for database management
 
 Database structure can be stored in database/schema.sql
-
-📌 Project Status
-
-🚧 In Progress
-
-Planned features:
-
-User authentication
-
-Cart persistence
-
-Orders history
-
-Admin panel
-
-Payment integration
-
-🎯 Purpose
-
-This project was created to:
-
-demonstrate fullstack development skills
-
-showcase TypeScript usage across the entire stack
-
-practice real-world client–server interaction
-
-serve as a portfolio project
