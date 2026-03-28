@@ -40,18 +40,36 @@ const Pizza: React.FC = () => {
 
   useEffect(() => {
     api
-      .get<Pizza[]>("/api/menu/")
+      .get("/api/menu/")
       .then((res) => {
-        const fetchedPizzas = res.data;
+        console.log("API response:", res.data);
+
+        const data = res.data;
+
+        const fetchedPizzas: Pizza[] = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+          ? data.data
+          : Array.isArray(data?.results)
+          ? data.results
+          : Array.isArray(data?.menu)
+          ? data.menu
+          : [];
+
         setPizzas(fetchedPizzas);
 
         const initialSizes = new Map<number, PizzaSize>(
           fetchedPizzas.map((pizza) => [
             pizza.id,
-            pizza.sizes.find((s) => s.size_cm === 28) || pizza.sizes[0],
+            pizza.sizes?.find((s) => s.size_cm === 28) || pizza.sizes?.[0],
           ])
         );
-        setSelectedSize(initialSizes);
+
+        const cleanedInitialSizes = new Map<number, PizzaSize>();
+        initialSizes.forEach((value, key) => {
+          if (value) cleanedInitialSizes.set(key, value);
+        });
+        setSelectedSize(cleanedInitialSizes);
 
         const initialQuantity = new Map<number, number>(
           fetchedPizzas.map((pizza) => [pizza.id, 1])
@@ -60,6 +78,7 @@ const Pizza: React.FC = () => {
       })
       .catch((err) => {
         console.error("Error fetching pizzas:", err);
+        setPizzas([]);
       });
   }, []);
 
@@ -83,6 +102,7 @@ const Pizza: React.FC = () => {
   };
 
   const filteredPizzas = useMemo(() => {
+    if (!Array.isArray(pizzas)) return [];
     if (activeCategory === "Показати всі") return pizzas;
     return pizzas.filter((pizza) => pizza.category === activeCategory);
   }, [pizzas, activeCategory]);
@@ -145,103 +165,104 @@ const Pizza: React.FC = () => {
           </div>
 
           <div className={styles.pizzaGrid}>
-            {filteredPizzas.map((pizza) => {
-              const currentSize = selectedSize.get(pizza.id);
-              const currentQuantity = quantityMap.get(pizza.id) || 1;
+            {Array.isArray(filteredPizzas) &&
+              filteredPizzas.map((pizza) => {
+                const currentSize = selectedSize.get(pizza.id);
+                const currentQuantity = quantityMap.get(pizza.id) || 1;
 
-              const baseTotal = (currentSize?.price || 0) * currentQuantity;
-              const extrasOne = ingredientsPriceMap.get(pizza.id) || 0;
-              const extrasTotal = extrasOne * currentQuantity;
-              const finalTotal = baseTotal + extrasTotal;
+                const baseTotal = (currentSize?.price || 0) * currentQuantity;
+                const extrasOne = ingredientsPriceMap.get(pizza.id) || 0;
+                const extrasTotal = extrasOne * currentQuantity;
+                const finalTotal = baseTotal + extrasTotal;
 
-              return (
-                <div key={pizza.id} className={styles.pizzaCard}>
-                  <img src={`/api/assets/pizza/${pizza.image}`} alt={pizza.name} />
+                return (
+                  <div key={pizza.id} className={styles.pizzaCard}>
+                    <img src={`/api/assets/pizza/${pizza.image}`} alt={pizza.name} />
 
-                  <h4>{pizza.name}</h4>
-                  <p>{pizza.description}</p>
+                    <h4>{pizza.name}</h4>
+                    <p>{pizza.description}</p>
 
-                  {pizza.sizes && pizza.sizes.length > 0 && (
-                    <div className={styles.sizeSelection}>
-                      {pizza.sizes.map((sizeObj) => (
-                        <div
-                          key={sizeObj.size_cm}
-                          className={`${styles.sizeCircle} ${
-                            currentSize?.size_cm === sizeObj.size_cm ? styles.selectedSize : ""
-                          }`}
-                          onClick={() => handleSizeChange(pizza.id, sizeObj)}
-                        >
-                          {sizeObj.size_cm}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
-                  <button
-                    className={styles.ingridientsBtn}
-                    onClick={() => setIngredientsPizzaId(pizza.id)}
-                  >
-                    + Інгредієнти
-                  </button>
-
-                  <div className={styles.cardBottom}>
-                    <div className={styles.priceAndQuantity}>
-                      <span className={styles.price}>{finalTotal.toFixed(2)}₴</span>
-
-                      <div className={styles.quantityControl}>
-                        <button
-                          type="button"
-                          className={styles.quantityBtn}
-                          onClick={() => handleQuantityChange(pizza.id, -1)}
-                        >
-                          -
-                        </button>
-                        <span className={styles.quantity}>{currentQuantity}</span>
-                        <button
-                          type="button"
-                          className={styles.quantityBtn}
-                          onClick={() => handleQuantityChange(pizza.id, 1)}
-                        >
-                          +
-                        </button>
+                    {pizza.sizes && pizza.sizes.length > 0 && (
+                      <div className={styles.sizeSelection}>
+                        {pizza.sizes.map((sizeObj) => (
+                          <div
+                            key={sizeObj.size_cm}
+                            className={`${styles.sizeCircle} ${
+                              currentSize?.size_cm === sizeObj.size_cm ? styles.selectedSize : ""
+                            }`}
+                            onClick={() => handleSizeChange(pizza.id, sizeObj)}
+                          >
+                            {sizeObj.size_cm}
+                          </div>
+                        ))}
                       </div>
-                    </div>
+                    )}
 
                     <button
-                      type="button"
-                      className={styles.orderBtn}
-                      onClick={() => {
-                        const size = selectedSize.get(pizza.id);
-                        if (!size) return;
-
-                        const ingredientIds = selectedIngredientIdsMap.get(pizza.id) || [];
-                        const ingredientsPrice = ingredientsPriceMap.get(pizza.id) || 0;
-
-                        const result = addItem({
-                          pizzaId: pizza.id,
-                          name: pizza.name,
-                          image: pizza.image,
-                          size_cm: size.size_cm,
-                          basePrice: size.price,
-                          quantity: currentQuantity,
-                          ingredientIds,
-                          ingredientsPrice,
-                        });
-
-                        if (!result.ok && result.reason === "NOT_AUTH") {
-                          setIsLoginOpen(true);
-                          return;
-                        }
-
-                        toast.success("Товар додано в кошик");
-                      }}
+                      className={styles.ingridientsBtn}
+                      onClick={() => setIngredientsPizzaId(pizza.id)}
                     >
-                      Замовити
+                      + Інгредієнти
                     </button>
+
+                    <div className={styles.cardBottom}>
+                      <div className={styles.priceAndQuantity}>
+                        <span className={styles.price}>{finalTotal.toFixed(2)}₴</span>
+
+                        <div className={styles.quantityControl}>
+                          <button
+                            type="button"
+                            className={styles.quantityBtn}
+                            onClick={() => handleQuantityChange(pizza.id, -1)}
+                          >
+                            -
+                          </button>
+                          <span className={styles.quantity}>{currentQuantity}</span>
+                          <button
+                            type="button"
+                            className={styles.quantityBtn}
+                            onClick={() => handleQuantityChange(pizza.id, 1)}
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        className={styles.orderBtn}
+                        onClick={() => {
+                          const size = selectedSize.get(pizza.id);
+                          if (!size) return;
+
+                          const ingredientIds = selectedIngredientIdsMap.get(pizza.id) || [];
+                          const ingredientsPrice = ingredientsPriceMap.get(pizza.id) || 0;
+
+                          const result = addItem({
+                            pizzaId: pizza.id,
+                            name: pizza.name,
+                            image: pizza.image,
+                            size_cm: size.size_cm,
+                            basePrice: size.price,
+                            quantity: currentQuantity,
+                            ingredientIds,
+                            ingredientsPrice,
+                          });
+
+                          if (!result.ok && result.reason === "NOT_AUTH") {
+                            setIsLoginOpen(true);
+                            return;
+                          }
+
+                          toast.success("Товар додано в кошик");
+                        }}
+                      >
+                        Замовити
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         </div>
       </div>
