@@ -177,8 +177,7 @@ const Pizza: React.FC = () => {
 
                 return (
                   <div key={pizza.id} className={styles.pizzaCard}>
-                    <img src={`/api/assets/pizza/${pizza.image}`} alt={pizza.name} />
-
+                    <img src={`${import.meta.env.VITE_API_URL}/assets/pizza/${pizza.image}`} alt={pizza.name} />
                     <h4>{pizza.name}</h4>
                     <p>{pizza.description}</p>
 
