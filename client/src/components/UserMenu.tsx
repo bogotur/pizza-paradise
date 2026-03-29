@@ -8,6 +8,8 @@ import PageLoader from "./PageLoader";
 
 import styles from "../styles/UserMenu.module.css";
 
+import userIcon from "../assets/icons/user.png";
+
 export default function UserMenu() {
   const { user, logout } = useContext(AuthContext);
   const { clear } = useContext(CartContext); 
@@ -53,7 +55,7 @@ export default function UserMenu() {
       <PageLoader open={isLoggingOut} text="Вихід..." />
 
       <div className={styles.iconCircle} onClick={() => setOpen((prev) => !prev)}>
-        <img src="/src/assets/icons/user.png" alt="User" />
+        <img src={userIcon} alt="User" />
       </div>
 
       {open && (
