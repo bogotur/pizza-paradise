@@ -5,6 +5,8 @@ import Pizza from './Pizza';
 import Events from './Events';
 import About from './About';
 
+import cookingBg from '../assets/icons/cooking_background.png';
+
 const Home: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -73,7 +75,7 @@ const Home: React.FC = () => {
 
               <div className={styles.videoBox}>
                 <img
-                  src="/src/assets/icons/cooking_background.png"
+                  src={cookingBg}
                   alt="video"
                   className={styles.videoImg}
                 />
