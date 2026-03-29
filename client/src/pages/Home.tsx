@@ -5,7 +5,7 @@ import Pizza from './Pizza';
 import Events from './Events';
 import About from './About';
 
-import backgroundImageTopRight from '../assets/images/pizza_hero.png';
+import backgroundImageTopRight from '../assets/icons/background_image.png';
 import cookingBg from '../assets/icons/cooking_background.png';
 import lightningIcon from '../assets/icons/lightning.png';
 import pizzaSliceIcon from '../assets/icons/pizza_slice.png';
