@@ -5,7 +5,11 @@ import Pizza from './Pizza';
 import Events from './Events';
 import About from './About';
 
+import backgroundImageTopRight from '../assets/images/pizza_hero.png';
 import cookingBg from '../assets/icons/cooking_background.png';
+import lightningIcon from '../assets/icons/lightning.png';
+import pizzaSliceIcon from '../assets/icons/pizza_slice.png';
+import friesIcon from '../assets/icons/fries.png';
 
 const Home: React.FC = () => {
   const location = useLocation();
@@ -39,12 +43,12 @@ const Home: React.FC = () => {
     <div className={styles.home}>
       <section className={styles.hero} id="top">
         <img
-          src="/src/assets/icons/pizza_slice.png"
+          src={pizzaSliceIcon}
           alt="pizza slice"
           className={styles.backgroundImageTopRight}
         />
         <img
-          src="/src/assets/icons/fries.png"
+          src={friesIcon}
           alt="fries box"
           className={styles.backgroundImageBottomLeft}
         />
@@ -57,7 +61,7 @@ const Home: React.FC = () => {
                 <span className={styles.pizzaWithLightning}>
                   <span className={styles.pizzaText}>Доставка</span>
                   <img
-                    src="/src/assets/icons/lightning.png"
+                    src={lightningIcon}
                     alt="Lightning icon"
                     className={styles.lightningIcon}
                   />
@@ -94,7 +98,7 @@ const Home: React.FC = () => {
 
             <div className={styles.right}>
               <img
-                src="/src/assets/icons/background_image.png"
+                src={backgroundImageTopRight}
                 alt="Pizza"
                 className={styles.heroPizza}
               />

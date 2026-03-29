@@ -6,6 +6,8 @@ import { AuthContext } from "../context/AuthContext";
 import UserMenu from "./UserMenu";
 import { CartContext } from "../context/CartContext";
 
+import bagIcon from "../assets/icons/bag.png";
+
 const scrollToElement = (id: string) => {
   const el = document.getElementById(id);
   if (el) {
@@ -111,7 +113,7 @@ export default function Navbar() {
                 role="button"
                 aria-label="Cart"
               >
-                <img src="/src/assets/icons/bag.png" alt="bag" />
+                <img src={bagIcon} alt="bag" />
 
                 {itemsCount > 0 && (
                   <span
