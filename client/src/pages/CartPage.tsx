@@ -217,7 +217,7 @@ export default function CartPage() {
                     <div key={x.cartId} className={styles.item}>
                       <img
                         className={styles.img}
-                        src={"/api/assets/pizza/${x.image}"}
+                        src={`${import.meta.env.VITE_API_URL}/assets/pizza/${x.image}`}
                         alt={x.name}
                       />
 
