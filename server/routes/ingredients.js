@@ -5,11 +5,11 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const { rows } = await db.query(
       `
       SELECT id, name
       FROM ingredients
-      WHERE is_available = 1
+      WHERE is_available = TRUE
       ORDER BY name ASC
       `
     );

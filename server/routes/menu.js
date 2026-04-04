@@ -24,7 +24,7 @@ const PIZZA_SIZES_QUERY = `
 
 router.get("/", async (req, res) => {
     try {
-        const [results] = await db.query(PIZZA_SIZES_QUERY);
+        const { rows: results } = await db.query(PIZZA_SIZES_QUERY);
 
         const groupedPizzas = results.reduce((acc, row) => {
             const { id, name, description, image, category, size_cm, price } = row;

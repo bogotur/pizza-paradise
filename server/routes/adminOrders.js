@@ -13,7 +13,7 @@ function adminOnly(req, res, next) {
 
 router.get("/", auth, adminOnly, async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const { rows } = await db.query(
       `
       SELECT
         o.id,
@@ -49,7 +49,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
   if (!id) return res.status(400).json({ message: "Invalid id" });
 
   try {
-    const [orders] = await db.query(
+    const { rows: orders } = await db.query(
       `
       SELECT
         o.*,
@@ -58,7 +58,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
         u.role AS user_role
       FROM orders o
       LEFT JOIN users u ON u.id = o.user_id
-      WHERE o.id = ?
+      WHERE o.id = $1
       LIMIT 1
       `,
       [id]
@@ -68,8 +68,8 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
       return res.status(404).json({ message: "Not found" });
     }
 
-    const [items] = await db.query(
-      `SELECT * FROM order_items WHERE order_id = ? ORDER BY id ASC`,
+    const { rows: items } = await db.query(
+      `SELECT * FROM order_items WHERE order_id = $1 ORDER BY id ASC`,
       [id]
     );
 
@@ -79,7 +79,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
 
     const itemIds = items.map((x) => x.id);
 
-    const [ings] = await db.query(
+    const { rows: ings } = await db.query(
       `
       SELECT
         oii.order_item_id,
@@ -87,7 +87,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
         i.name
       FROM order_item_ingredients oii
       JOIN ingredients i ON i.id = oii.ingredient_id
-      WHERE oii.order_item_id IN (?)
+      WHERE oii.order_item_id = ANY($1::int[])
       ORDER BY oii.order_item_id ASC, i.name ASC
       `,
       [itemIds]
@@ -122,7 +122,7 @@ router.patch("/:id/status", auth, adminOnly, async (req, res) => {
   }
 
   try {
-    await db.query(`UPDATE orders SET status = ? WHERE id = ?`, [status, id]);
+    await db.query(`UPDATE orders SET status = $1 WHERE id = $2`, [status, id]);
     res.json({ success: true });
   } catch (err) {
     console.error("Admin order status error:", err);
@@ -135,9 +135,11 @@ router.delete("/:id", auth, adminOnly, async (req, res) => {
   if (!id) return res.status(400).json({ message: "Invalid id" });
 
   try {
-    const [r] = await db.query("DELETE FROM orders WHERE id = ?", [id]);
+    const result = await db.query("DELETE FROM orders WHERE id = $1", [id]);
 
-    if (!r.affectedRows) return res.status(404).json({ message: "Not found" });
+    if (!result.rowCount) {
+      return res.status(404).json({ message: "Not found" });
+    }
 
     res.json({ success: true });
   } catch (err) {

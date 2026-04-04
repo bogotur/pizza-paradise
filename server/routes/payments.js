@@ -16,20 +16,24 @@ function makeTxId() {
 router.post("/fake", auth, async (req, res) => {
   const { orderId, card_last4 } = req.body;
 
-  if (!orderId) return res.status(400).json({ message: "orderId required" });
+  if (!orderId) {
+    return res.status(400).json({ message: "orderId required" });
+  }
 
   try {
-    const [rows] = await db.query(
-      "SELECT id FROM orders WHERE id = ? AND user_id = ? LIMIT 1",
+    const { rows } = await db.query(
+      "SELECT id FROM orders WHERE id = $1 AND user_id = $2 LIMIT 1",
       [orderId, req.user.id]
     );
 
-    if (rows.length === 0) return res.status(404).json({ message: "Order not found" });
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "Order not found" });
+    }
 
     const tx = makeTxId();
 
     await db.query(
-      "UPDATE orders SET status = 'paid', transaction_id = ?, card_last4 = ? WHERE id = ?",
+      "UPDATE orders SET status = 'paid', transaction_id = $1, card_last4 = $2 WHERE id = $3",
       [tx, card_last4 || null, orderId]
     );
 

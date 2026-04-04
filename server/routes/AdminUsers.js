@@ -13,7 +13,7 @@ function adminOnly(req, res, next) {
 
 router.get("/", auth, adminOnly, async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const { rows } = await db.query(
       `
       SELECT
         u.id,
@@ -42,7 +42,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
   if (!id) return res.status(400).json({ message: "Invalid id" });
 
   try {
-    const [users] = await db.query(
+    const { rows: users } = await db.query(
       `
       SELECT
         u.id,
@@ -54,7 +54,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
         MAX(o.created_at) AS last_order_at
       FROM users u
       LEFT JOIN orders o ON o.user_id = u.id
-      WHERE u.id = ?
+      WHERE u.id = $1
       GROUP BY u.id, u.email, u.role, u.created_at
       LIMIT 1
       `,
@@ -65,7 +65,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const [orders] = await db.query(
+    const { rows: orders } = await db.query(
       `
       SELECT
         id,
@@ -80,7 +80,7 @@ router.get("/:id", auth, adminOnly, async (req, res) => {
         comment,
         created_at
       FROM orders
-      WHERE user_id = ?
+      WHERE user_id = $1
       ORDER BY id DESC
       `,
       [id]
@@ -110,13 +110,13 @@ router.patch("/:id/role", auth, adminOnly, async (req, res) => {
       return res.status(400).json({ message: "Не можна забрати роль admin у самого себе" });
     }
 
-    const [admins] = await db.query(
+    const { rows: admins } = await db.query(
       `SELECT COUNT(*) AS count FROM users WHERE role = 'admin'`
     );
 
     if (role !== "admin") {
-      const [target] = await db.query(
-        `SELECT id, role FROM users WHERE id = ? LIMIT 1`,
+      const { rows: target } = await db.query(
+        `SELECT id, role FROM users WHERE id = $1 LIMIT 1`,
         [id]
       );
 
@@ -129,9 +129,12 @@ router.patch("/:id/role", auth, adminOnly, async (req, res) => {
       }
     }
 
-    const [result] = await db.query(`UPDATE users SET role = ? WHERE id = ?`, [role, id]);
+    const result = await db.query(
+      `UPDATE users SET role = $1 WHERE id = $2`,
+      [role, id]
+    );
 
-    if (!result.affectedRows) {
+    if (!result.rowCount) {
       return res.status(404).json({ message: "User not found" });
     }
 
@@ -149,14 +152,15 @@ router.delete("/:id", auth, adminOnly, async (req, res) => {
     return res.status(400).json({ message: "Invalid id" });
   }
 
-  let conn;
+  const client = await db.connect();
+
   try {
     if (req.user.id === id) {
       return res.status(400).json({ message: "Не можна видалити самого себе" });
     }
 
-    const [users] = await db.query(
-      `SELECT id, role FROM users WHERE id = ? LIMIT 1`,
+    const { rows: users } = await client.query(
+      `SELECT id, role FROM users WHERE id = $1 LIMIT 1`,
       [id]
     );
 
@@ -167,7 +171,7 @@ router.delete("/:id", auth, adminOnly, async (req, res) => {
     const user = users[0];
 
     if (user.role === "admin") {
-      const [admins] = await db.query(
+      const { rows: admins } = await client.query(
         `SELECT COUNT(*) AS count FROM users WHERE role = 'admin'`
       );
 
@@ -178,26 +182,26 @@ router.delete("/:id", auth, adminOnly, async (req, res) => {
       }
     }
 
-    conn = await db.getConnection();
-    await conn.beginTransaction();
+    await client.query("BEGIN");
 
-    await conn.query(`DELETE FROM orders WHERE user_id = ?`, [id]);
+    await client.query(`DELETE FROM orders WHERE user_id = $1`, [id]);
 
-    const [result] = await conn.query(`DELETE FROM users WHERE id = ?`, [id]);
+    const result = await client.query(`DELETE FROM users WHERE id = $1`, [id]);
 
-    if (!result.affectedRows) {
-      await conn.rollback();
+    if (!result.rowCount) {
+      await client.query("ROLLBACK");
       return res.status(404).json({ message: "User not found" });
     }
 
-    await conn.commit();
+    await client.query("COMMIT");
+
     res.json({ success: true });
   } catch (err) {
-    if (conn) await conn.rollback();
+    await client.query("ROLLBACK");
     console.error("Admin delete user error:", err);
     res.status(500).json({ message: "Server error" });
   } finally {
-    if (conn) conn.release();
+    client.release();
   }
 });
 

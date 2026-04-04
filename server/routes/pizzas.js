@@ -11,7 +11,7 @@ const GET_PIZZA_INGREDIENTS = `
     i.is_available
   FROM pizza_allowed_ingredients pai
   JOIN ingredients i ON i.id = pai.ingredient_id
-  WHERE pai.pizza_id = ?
+  WHERE pai.pizza_id = $1
   ORDER BY i.name;
 `;
 
@@ -23,7 +23,7 @@ router.get("/:id/ingredients", async (req, res) => {
   }
 
   try {
-    const [rows] = await db.query(GET_PIZZA_INGREDIENTS, [pizzaId]);
+    const { rows } = await db.query(GET_PIZZA_INGREDIENTS, [pizzaId]);
     res.json(rows);
   } catch (err) {
     console.error("Ingredients DB error:", err);

@@ -44,7 +44,7 @@ const toMoney = (value) => {
 
 router.get("/my", auth, async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const { rows } = await db.query(
       `
       SELECT
         id,
@@ -57,7 +57,7 @@ router.get("/my", auth, async (req, res) => {
         delivery_address,
         comment
       FROM orders
-      WHERE user_id = ?
+      WHERE user_id = $1
       ORDER BY id DESC
       `,
       [req.user.id]
@@ -75,10 +75,10 @@ router.get("/my/:id", auth, async (req, res) => {
   if (!id) return res.status(400).json({ message: "Invalid id" });
 
   try {
-    const [orders] = await db.query(
+    const { rows: orders } = await db.query(
       `SELECT *
        FROM orders
-       WHERE id = ? AND user_id = ?
+       WHERE id = $1 AND user_id = $2
        LIMIT 1`,
       [id, req.user.id]
     );
@@ -87,8 +87,8 @@ router.get("/my/:id", auth, async (req, res) => {
       return res.status(404).json({ message: "Not found" });
     }
 
-    const [items] = await db.query(
-      `SELECT * FROM order_items WHERE order_id = ? ORDER BY id ASC`,
+    const { rows: items } = await db.query(
+      `SELECT * FROM order_items WHERE order_id = $1 ORDER BY id ASC`,
       [id]
     );
 
@@ -98,7 +98,7 @@ router.get("/my/:id", auth, async (req, res) => {
 
     const itemIds = items.map((x) => x.id);
 
-    const [ings] = await db.query(
+    const { rows: ings } = await db.query(
       `
       SELECT
         oii.order_item_id,
@@ -106,7 +106,7 @@ router.get("/my/:id", auth, async (req, res) => {
         i.name
       FROM order_item_ingredients oii
       JOIN ingredients i ON i.id = oii.ingredient_id
-      WHERE oii.order_item_id IN (?)
+      WHERE oii.order_item_id = ANY($1::int[])
       ORDER BY oii.order_item_id ASC, i.name ASC
       `,
       [itemIds]
@@ -148,10 +148,6 @@ router.post("/", auth, async (req, res) => {
     return res.status(400).json({ message: "Кошик порожній" });
   }
 
-  if (items.length > 50) {
-    return res.status(400).json({ message: "Занадто багато позицій у замовленні" });
-  }
-
   if (!isValidName(safeName)) {
     return res.status(400).json({ message: "Введіть коректне ім’я" });
   }
@@ -168,10 +164,6 @@ router.post("/", auth, async (req, res) => {
   let total = 0;
 
   for (const it of items) {
-    if (!it || typeof it !== "object") {
-      return res.status(400).json({ message: "Некоректні позиції" });
-    }
-
     const pizzaId = Number(it.pizzaId);
     const sizeCm = Number(it.size_cm);
     const quantity = Number(it.quantity);
@@ -179,52 +171,13 @@ router.post("/", auth, async (req, res) => {
     const ingredientsPrice = toMoney(it.ingredientsPrice || 0);
     const unitPrice = toMoney(it.unit_price);
     const subtotal = toMoney(it.subtotal);
+
     const ingredientIds = Array.isArray(it.ingredientIds)
       ? [...new Set(it.ingredientIds.map(Number).filter((x) => Number.isInteger(x) && x > 0))]
       : [];
 
-    const name = String(it.name || "").trim();
-    const image = String(it.image || "").trim();
-
-    if (!Number.isInteger(pizzaId) || pizzaId <= 0) {
-      return res.status(400).json({ message: "Некоректний товар у кошику" });
-    }
-
-    if (!name || name.length > 120) {
-      return res.status(400).json({ message: "Некоректна назва позиції" });
-    }
-
-    if (!image || image.length > 255) {
-      return res.status(400).json({ message: "Некоректне зображення позиції" });
-    }
-
-    if (!Number.isInteger(sizeCm) || sizeCm <= 0) {
-      return res.status(400).json({ message: "Некоректний розмір позиції" });
-    }
-
-    if (!Number.isInteger(quantity) || quantity <= 0 || quantity > 50) {
-      return res.status(400).json({ message: "Некоректна кількість" });
-    }
-
-    if (basePrice === null || ingredientsPrice === null || unitPrice === null || subtotal === null) {
-      return res.status(400).json({ message: "Некоректна сума позиції" });
-    }
-
-    const expectedUnitPrice = Number((basePrice + ingredientsPrice).toFixed(2));
-    const expectedSubtotal = Number((expectedUnitPrice * quantity).toFixed(2));
-
-    if (unitPrice !== expectedUnitPrice) {
-      return res.status(400).json({ message: "Некоректна ціна позиції" });
-    }
-
-    if (subtotal !== expectedSubtotal) {
-      return res.status(400).json({ message: "Некоректна сума позиції" });
-    }
-
     normalizedItems.push({
       pizzaId,
-      name,
-      image,
       size_cm: sizeCm,
       quantity,
       basePrice,
@@ -232,22 +185,25 @@ router.post("/", auth, async (req, res) => {
       unit_price: unitPrice,
       subtotal,
       ingredientIds,
+      name: it.name,
+      image: it.image,
     });
 
     total = Number((total + subtotal).toFixed(2));
   }
 
-  const conn = await db.getConnection();
+  const client = await db.connect();
 
   try {
-    await conn.beginTransaction();
+    await client.query("BEGIN");
 
-    const [orderResult] = await conn.query(
+    const orderResult = await client.query(
       `INSERT INTO orders (
          user_id, total, status, payment_method, transaction_id,
          customer_name, customer_phone, delivery_address, comment
        )
-       VALUES (?, ?, 'pending', 'card', NULL, ?, ?, ?, ?)`,
+       VALUES ($1, $2, 'pending', 'card', NULL, $3, $4, $5, $6)
+       RETURNING id`,
       [
         req.user.id,
         total,
@@ -258,15 +214,16 @@ router.post("/", auth, async (req, res) => {
       ]
     );
 
-    const orderId = orderResult.insertId;
+    const orderId = orderResult.rows[0].id;
 
     for (const it of normalizedItems) {
-      const [itemResult] = await conn.query(
+      const itemResult = await client.query(
         `INSERT INTO order_items (
            order_id, pizza_id, name, image, size_cm, qty,
            base_price, ingredients_price, unit_price, subtotal
          )
-         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+         RETURNING id`,
         [
           orderId,
           it.pizzaId,
@@ -281,27 +238,25 @@ router.post("/", auth, async (req, res) => {
         ]
       );
 
-      const orderItemId = itemResult.insertId;
+      const orderItemId = itemResult.rows[0].id;
 
-      if (it.ingredientIds.length > 0) {
-        for (const ingId of it.ingredientIds) {
-          await conn.query(
-            `INSERT INTO order_item_ingredients (order_item_id, ingredient_id)
-             VALUES (?, ?)`,
-            [orderItemId, ingId]
-          );
-        }
+      for (const ingId of it.ingredientIds) {
+        await client.query(
+          `INSERT INTO order_item_ingredients (order_item_id, ingredient_id)
+           VALUES ($1, $2)`,
+          [orderItemId, ingId]
+        );
       }
     }
 
-    await conn.commit();
+    await client.query("COMMIT");
     res.json({ success: true, orderId });
   } catch (err) {
-    await conn.rollback();
+    await client.query("ROLLBACK");
     console.error("Create order error:", err);
     res.status(500).json({ message: "Помилка сервера" });
   } finally {
-    conn.release();
+    client.release();
   }
 });
 
